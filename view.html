@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ההקלטה זמינה לצפייה | רבקה הולצברג</title>
+    
+    <!-- Google Fonts: Rubik -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --primary-green: #1B4D3E;
+            --primary-deep: #12332a;
+            --accent-gold: #D4AF37;
+            --accent-gold-light: #FCE38A;
+            --bg-cream: #FDFBF7;
+            --text-dark: #1A1A1A;
+            --text-muted: #4A5568;
+            --error: #ef4444;
+            
+            /* עיצוב פרימיום */
+            --shadow-gold: 0 10px 30px rgba(212, 175, 55, 0.25);
+            --shadow-float: 0 20px 40px rgba(0, 0, 0, 0.1);
+            --glass: rgba(255, 255, 255, 0.96);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+            direction: rtl;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── רקע דקורטיבי יוקרתי ── */
+        .page-wrapper {
+            position: relative;
+            min-height: 100vh;
+            background: 
+                radial-gradient(circle at top left, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at bottom right, rgba(27, 77, 62, 0.05) 0%, transparent 40%);
+        }
+
+        /* ── TOP ANNOUNCEMENT ── */
+        .top-bar {
+            background: var(--primary-green);
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: 500;
+            border-bottom: 2px solid var(--accent-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            z-index: 100;
+        }
+        .top-bar b { color: var(--accent-gold-light); font-weight: 700; }
+
+        /* ── HERO SECTION ── */
+        .hero {
+            padding: 50px 24px 120px;
+            text-align: center;
+            background: var(--primary-green);
+            color: white;
+            position: relative;
+            clip-path: ellipse(150% 100% at 50% 0%);
+        }
+
+        .hero h1 {
+            font-size: clamp(30px, 6vw, 50px);
+            font-weight: 900;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .hero h1 em { font-style: normal; color: var(--accent-gold-light); }
+
+        .hero p {
+            font-size: 19px;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ── VIDEO PLAYER AREA ── */
+        .main-content {
+            max-width: 900px;
+            margin: -90px auto 40px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .video-container {
+            background: #fff;
+            border-radius: 24px;
+            padding: 10px;
+            box-shadow: var(--shadow-float);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            animation: fadeInScale 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .video-frame {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000;
+        }
+        .video-frame iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%; border: 0;
+        }
+
+        /* ── TIMER AREA ── */
+        .timer-strip {
+            margin: 30px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .timer-strip span {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary-green);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .countdown-digits {
+            display: flex;
+            gap: 10px;
+        }
+        .digit-box {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid #E2D8CA;
+            text-align: center;
+            min-width: 65px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+        .digit-val {
+            display: block;
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--primary-green);
+            line-height: 1;
+            font-family: monospace;
+        }
+        .digit-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent-gold);
+        }
+
+        /* ── ACTION CARD ── */
+        .action-card {
+            background: var(--glass);
+            border-radius: 32px;
+            padding: 40px;
+            border: 2px solid var(--accent-gold);
+            box-shadow: var(--shadow-gold);
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeUp 0.8s 0.2s ease both;
+        }
+
+        .action-card h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary-green);
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #FFF9E6;
+            color: var(--primary-green);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            border: 1px solid var(--accent-gold-light);
+            margin-bottom: 20px;
+        }
+
+        .price-tag {
+            margin: 25px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .price-tag .old {
+            text-align: right;
+            color: var(--text-muted);
+        }
+        .price-tag .old s { font-size: 20px; color: var(--error); display: block; }
+        .price-tag .new {
+            font-size: 64px;
+            font-weight: 900;
+            color: var(--primary-green);
+            line-height: 1;
+        }
+        .price-tag .new span { font-size: 28px; margin-right: 4px; }
+
+        /* ── FORM ── */
+        .lead-form {
+            max-width: 420px;
+            margin: 30px auto 0;
+            display: grid;
+            gap: 12px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 18px 20px;
+            border: 1.5px solid #E2D8CA;
+            border-radius: 14px;
+            font-family: 'Rubik', sans-serif;
+            font-size: 18px;
+            background: #fff;
+            outline: none;
+            transition: 0.3s;
+            text-align: right;
+        }
+        .form-input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #FCE38A 0%, #D4AF37 50%, #997B09 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 50px;
+            font-size: 22px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-gold);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .btn-gold:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
+        }
+        .btn-gold:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            opacity: 0.5;
+            font-size: 14px;
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.97) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .hero { padding: 40px 20px 100px; }
+            .hero h1 { font-size: 28px; }
+            .hero p { font-size: 16px; }
+            .main-content { margin-top: -80px; }
+            .action-card { padding: 30px 20px; }
+            .price-tag .new { font-size: 48px; }
+            .btn-gold { font-size: 19px; padding: 16px; }
+            .digit-box { min-width: 55px; padding: 8px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <i data-lucide="sparkles" style="width: 18px; color: var(--accent-gold-light)"></i>
+        הצעה בלעדית: <b>הטבת הצטרפות לזמן מוגבל</b>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+        <h1>ההדרכה: <em>סוד הבריאות העתיק</em></h1>
+        <p>איך להחזיר את האנרגיה לגוף ולאזן את המדדים בדרך הטבעית.</p>
+    </section>
+
+    <!-- CONTENT -->
+    <div class="main-content">
+        
+        <!-- VIDEO -->
+        <div class="video-container">
+            <div class="video-frame">
+                <iframe 
+                    src="https://player.vimeo.com/video/1174143099?badge=0&autopause=0&player_id=0&app_id=58479" 
+                    frameborder="0" 
+                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write" 
+                    title="סוד הבריאות העתיק"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <!-- TIMER -->
+        <div class="timer-strip">
+            <span>המבצע מסתיים בעוד:</span>
+            <div class="countdown-digits">
+                <div class="digit-box"><span class="digit-val" id="d-val">00</span><span class="digit-label">ימים</span></div>
+                <div class="digit-box"><span class="digit-val" id="h-val">00</span><span class="digit-label">שעות</span></div>
+                <div class="digit-box"><span class="digit-val" id="m-val">00</span><span class="digit-label">דקות</span></div>
+                <div class="digit-box"><span class="digit-val" id="s-val">00</span><span class="digit-label">שניות</span></div>
+            </div>
+        </div>
+
+        <!-- ACTION BOX -->
+        <div class="action-card">
+            <div class="badge">הזדמנות להצטרף למועדון</div>
+            <h2>רוצה להתחיל לחיות אחרת?</h2>
+            <p>השאירי פרטים לקבלת ההסבר המלא ומימוש ההטבה:</p>
+            
+            <div class="price-tag">
+                <div class="old">
+                    <s>79 ₪</s>
+                    <span style="color: #27ae60; font-weight: 700; font-size: 14px;">חיסכון של 30 ₪</span>
+                </div>
+                <div class="new">
+                    <span>₪</span>49
+                </div>
+            </div>
+
+            <form id="leadCapture" class="lead-form" novalidate>
+                <input type="text" id="name" name="name" class="form-input" required minlength="2" placeholder="שם מלא">
+                <input type="tel" id="phone" name="phone" class="form-input" required pattern="^(\+?\d{1,3}[- ]?)?\d{9,12}$|^05\d{8}$" placeholder="מספר טלפון">
+                
+                <button type="submit" id="submitBtn" class="btn-gold">
+                    <span>כן, אני רוצה את ההסבר המלא</span>
+                    <i data-lucide="arrow-left"></i>
+                </button>
+            </form>
+        </div>
+
+        <div class="footer">
+            <script src="https://rivkaol.github.io/legal-footer.js"></script>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize Icons
+    window.onload = () => lucide.createIcons();
+
+    // Timer Logic - 14/05/2026 00:00
+    const deadline = new Date('2026-05-14T00:00:00').getTime();
+
+    const updateTimer = () => {
+        const now = new Date().getTime();
+        const gap = deadline - now;
+
+        if (gap <= 0) {
+            document.querySelectorAll('.digit-val').forEach(el => el.textContent = '00');
+            return;
+        }
+
+        const d = Math.floor(gap / (1000 * 60 * 60 * 24));
+        const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((gap % (1000 * 60)) / 1000);
+
+        document.getElementById('d-val').textContent = String(d).padStart(2, '0');
+        document.getElementById('h-val').textContent = String(h).padStart(2, '0');
+        document.getElementById('m-val').textContent = String(m).padStart(2, '0');
+        document.getElementById('s-val').textContent = String(s).padStart(2, '0');
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    // Form Handler
+    const form = document.getElementById('leadCapture');
+    const btn = document.getElementById('submitBtn');
+    const webhook = 'https://hook.eu2.make.com/2rih1zwpuotbwpugi5gcwfl1t4tawswo';
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<span>כבר מעבירה אותך...</span>';
+
+        const payload = {
+            name: document.getElementById('name').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            source: 'recording_offer_premium',
+            timestamp: new Date().toISOString()
+        };
+
+        try {
+            await fetch(webhook, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            window.location.href = 'https://rivkaholtsberg.co.il/webinarm/hatza';
+        } catch (err) {
+            // Forward anyway to ensure the user gets the offer
+            window.location.href = 'https://rivkaholtsberg.co.il/webinarm/hatza';
+        }
+    });
+</script>
+</body>
+</html>
